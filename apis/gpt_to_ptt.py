@@ -10,4 +10,6 @@ router = APIRouter()
 def get_ppt_file(data: ChatgptToPpt):
     generate_notes(data.title)
     markdownToPPT()
-    return FileResponse(f'{data.title}主題課程.pptx')
+    return FileResponse(f'{data.title}主題課程.pptx', filename=f'{data.title}主題課程.pptx', headers={
+        "Content-Type": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    })
