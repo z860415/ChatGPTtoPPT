@@ -23,10 +23,8 @@ def generate_notes(title:str, name: str):
     ai_msg = response.choices[0].message.content
     messages.append({"role":"assistant","content":ai_msg})   # 添加 ChatGPT 回應
     # print(f'ai > {ai_msg}')
-    file = open('../output.txt', 'w', encoding='utf-8')
-    file.write(ai_msg)
-    file.close()
-
+    with open('./output.txt', 'w', encoding='utf-8') as file:
+        file.write(ai_msg)
 
 if __name__ == "__main__":
     generate_notes(title='毛語錄', name="李宗育")
