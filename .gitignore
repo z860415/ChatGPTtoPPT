@@ -1,3 +1,5 @@
 .env
 **env
 **txt
+__pycache__
+**pptx

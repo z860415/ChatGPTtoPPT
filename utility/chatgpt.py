@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def generate_notes(title:str, name: str):
+def generate_notes(title:str):
     request_string = f'''
     請幫我把「{title}」主題課程，以好的方面闡述，整理成4000字三級結構簡報，以 Markdown 標記語法原始程式碼方便複製使用
     '''
@@ -25,6 +25,3 @@ def generate_notes(title:str, name: str):
     # print(f'ai > {ai_msg}')
     with open('./output.txt', 'w', encoding='utf-8') as file:
         file.write(ai_msg)
-
-if __name__ == "__main__":
-    generate_notes(title='毛語錄', name="李宗育")

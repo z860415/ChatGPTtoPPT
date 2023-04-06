@@ -55,16 +55,11 @@ def markdownToPPT():
         
         time.sleep(5)
         print("Waiting for downloads", end="")
-        while any([filename.endswith(".crdownload") for filename in 
-               os.listdir(work_dir)]):
+        while any([filename.endswith(".crdownload") for filename in os.listdir(work_dir)]):
             time.sleep(2)
-            print(".", end="")
-        print("done!")
 
     except Exception as E:
-        print(E)
+        driver.close()
+        markdownToPPT()
     finally:
         driver.close()
-
-if __name__ == "__main__":
-    markdownToPPT()
