@@ -8,6 +8,7 @@
     </div>
     <div v-if="isLoading" class="loading-mask">
       <div class="loading-spinner"></div>
+      <div class="loading-text">檔案生成中...</div>
     </div>
   </div>
 </template>
@@ -23,21 +24,23 @@ export default defineComponent({
     return {
       inputValue: '',
       isLoading: false,
+      loadingText: '',
     };
   },
   methods: {
     async submit() {
       this.isLoading = true;
+      this.loadingText = '檔案生成中...';
       try {
         const response = await axios.post('http://localhost:8086/get_ppt/get_ppt_file', {
-          title: this.inputValue,
+          inputValue: this.inputValue,
         }, {
-          responseType: 'blob', // 指定响应类型为二进制数据流
+          responseType: 'blob',
         });
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'pptx_file.pptx'); // 指定下载文件名
+        link.setAttribute('download', 'pptx_file.pptx');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -45,6 +48,7 @@ export default defineComponent({
         console.error(error);
       } finally {
         this.isLoading = false;
+        this.loadingText = '';
       }
     },
   },
@@ -99,6 +103,12 @@ export default defineComponent({
   width: 30px;
   height: 30px;
   animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  margin-top: 10px;
+  color: #fff;
+  font-size: 16px;
 }
 
 @keyframes spin {
