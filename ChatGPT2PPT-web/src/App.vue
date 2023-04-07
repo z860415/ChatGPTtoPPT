@@ -2,7 +2,7 @@
   <div class="container">
     <h1 class="title">AI 教材生成器</h1>
     <div class="form">
-      <el-input v-model="inputValue" placeholder="請輸入文字"></el-input>
+      <el-input v-model="inputValue" placeholder="請輸入主題"></el-input>
       <div class="spacer"></div>
       <el-button :loading="isLoading" @click="submit">送出</el-button>
     </div>
@@ -15,6 +15,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { ElInput, ElButton } from 'element-plus';
+import axios from 'axios';
 
 export default defineComponent({
   components: { ElInput, ElButton },
@@ -27,10 +28,24 @@ export default defineComponent({
   methods: {
     async submit() {
       this.isLoading = true;
-      // 模擬一個耗時的操作
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      console.log(this.inputValue);
-      this.isLoading = false;
+      try {
+        const response = await axios.post('http://localhost:8086/get_ppt/get_ppt_file', {
+          title: this.inputValue,
+        }, {
+          responseType: 'blob', // 指定响应类型为二进制数据流
+        });
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'pptx_file.pptx'); // 指定下载文件名
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
 });
