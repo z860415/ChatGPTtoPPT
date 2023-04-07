@@ -1,7 +1,7 @@
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-import requests, pickle, time
+import requests, pickle, time, os
 import yaml
 
 
@@ -10,13 +10,13 @@ try:
     driver.set_page_load_timeout(30)
     driver.get('https://www.mindshow.fun/#/login')
     account_input = driver.find_element(By.XPATH,'//*[@id="login_tab"]/div[1]/div[3]/div/div[4]/div[1]/input')
-    account_input.send_keys('z860415@gmail.com')
+    account_input.send_keys(os.getenv('MINDSHOW_ACCOUNT'))
     time.sleep(3)
     submit_button = driver.find_element(By.XPATH, '//*[@id="login_tab"]/div[1]/div[3]/div/div[4]/div[2]')
     submit_button.click()
     time.sleep(10)
     password_input = driver.find_element(By.XPATH, '//*[@id="loginEmailPassword"]')
-    password_input.send_keys('z800525')
+    password_input.send_keys(os.getenv('MINDSHOW_PASSWORD'))
     time.sleep(3)
     submit_button = driver.find_element(By.XPATH, '//*[@id="app"]/section/div[2]/div/div[1]/div[5]')
     submit_button.click()

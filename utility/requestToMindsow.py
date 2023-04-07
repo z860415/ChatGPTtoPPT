@@ -57,6 +57,9 @@ def markdownToPPT():
         print("Waiting for downloads", end="")
         while any([filename.endswith(".crdownload") for filename in os.listdir(work_dir)]):
             time.sleep(2)
+        for filename in os.listdir(work_dir):
+            if filename.endswith('.pptx'):
+                os.replace(filename, './download/file.pptx')
 
     except Exception as E:
         driver.close()
