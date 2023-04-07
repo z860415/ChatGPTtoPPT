@@ -4,3 +4,17 @@
 __pycache__
 **pptx
 download
+node_modules
+yarn.lock
+.vscode
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
