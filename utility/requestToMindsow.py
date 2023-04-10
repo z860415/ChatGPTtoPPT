@@ -18,10 +18,10 @@ def markdownToPPT():
             "download.directory_upgrade": True,
             "safebrowsing.enabled": True
         })
+        print('打開瀏覽器')
         driver = webdriver.Chrome('./driver/chromedriver.exe', options=options)
         driver.set_page_load_timeout(30)
         driver.get('https://www.mindshow.fun/')
-        print('打開瀏覽器')
         localstorage = yaml.safe_load(open('local_storage.yml'))
         for key, value in localstorage.items():
             driver.execute_script("localStorage.setItem(arguments[0],arguments[1]);", key, value)
