@@ -18,6 +18,9 @@ def markdownToPPT():
             "download.directory_upgrade": True,
             "safebrowsing.enabled": True
         })
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--headless')
         print('打開瀏覽器')
         driver = webdriver.Chrome('./driver/chromedriver.exe', options=options)
         driver.set_page_load_timeout(30)
