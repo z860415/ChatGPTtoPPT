@@ -19,7 +19,10 @@ def generate_notes(title:str):
         temperature=0.5,
         messages=messages
     )
+    print('向 gpt 提問中')
     ai_msg = response.choices[0].message.content
     messages.append({"role":"assistant","content":ai_msg})
+    print('取得資訊')
+    print(ai_msg)
     with open('./output.txt', 'w', encoding='utf-8') as file:
         file.write(ai_msg)
