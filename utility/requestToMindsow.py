@@ -22,7 +22,7 @@ def markdownToPPT():
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--headless')
         print('打開瀏覽器')
-        driver = webdriver.Chrome('./driver/chromedriver.exe', options=options)
+        driver = webdriver.Chrome('./driver/chromedriver', options=options)
         driver.set_page_load_timeout(30)
         driver.get('https://www.mindshow.fun/')
         localstorage = yaml.safe_load(open('local_storage.yml'))
