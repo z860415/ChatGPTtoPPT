@@ -21,6 +21,7 @@ def markdownToPPT():
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--headless')
+        options.add_experimental_option('extensionLoadTimeout', 60000)
         print('打開瀏覽器')
         driver = webdriver.Chrome('./driver/chromedriver', options=options)
         driver.set_page_load_timeout(30)
