@@ -1,4 +1,7 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromiumService
+from webdriver_manager.core.utils import ChromeType
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait 
 from selenium.webdriver.support import expected_conditions as EC 
@@ -21,9 +24,8 @@ def markdownToPPT():
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--headless')
-        options.add_experimental_option('extensionLoadTimeout', 60000)
-        print('打開瀏覽器')
-        driver = webdriver.Chrome('./driver/chromedriver', options=options)
+        driver = webdriver.Chrome(service=ChromiumService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()), options=options)
+        driver.set_page_load_timeout(30)
         driver.set_page_load_timeout(30)
         driver.get('https://www.mindshow.fun/')
         localstorage = yaml.safe_load(open('local_storage.yml'))
