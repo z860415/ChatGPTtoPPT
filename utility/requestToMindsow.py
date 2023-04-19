@@ -5,10 +5,14 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait 
 from selenium.webdriver.support import expected_conditions as EC 
-import pickle,time, yaml, os
+import time, os
+from dotenv import load_dotenv
 
 
 def markdownToPPT():
+    load_dotenv()
+    MINDSHOW_ACCOUNT = os.getenv('MINDSHOW_ACCOUNT')
+    MINDSHOW_PASSWORD = os.getenv('MINDSHOW_PASSWORD')
     try:
         work_dir = os.path.abspath(os.getcwd())
         download_button_xpath = '//*[@id="m2p_r_ppt_share_btn"]'
@@ -26,17 +30,31 @@ def markdownToPPT():
         options.add_argument('--headless')
         driver = webdriver.Chrome(service=ChromiumService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()), options=options)
         driver.set_page_load_timeout(30)
-        driver.set_page_load_timeout(30)
-        driver.get('https://www.mindshow.fun/')
-        localstorage = yaml.safe_load(open('local_storage.yml'))
-        for key, value in localstorage.items():
-            driver.execute_script("localStorage.setItem(arguments[0],arguments[1]);", key, value)
-    
-        cookies = pickle.load(open("cookies.pkl", "rb"))
-        for cookie in cookies: 
-            driver.add_cookie(cookie)
+        print('開啟瀏覽器')
+        driver.get('https://www.mindshow.fun/#/login')
+
+        waitElement = (By.XPATH,'//*[@id="login_tab"]/div[1]/div[3]/div/div[4]/div[1]/input')
+        WebDriverWait(driver, 30, 1).until(EC.presence_of_element_located(waitElement))
+        account_input = driver.find_element(By.XPATH, '//*[@id="login_tab"]/div[1]/div[3]/div/div[4]/div[1]/input')
+        account_input.send_keys(MINDSHOW_ACCOUNT)
+
+        waitElement = (By.XPATH,'//*[@id="login_tab"]/div[1]/div[3]/div/div[4]/div[2]')
+        WebDriverWait(driver, 30, 1).until(EC.presence_of_element_located(waitElement))
+        submit_button = driver.find_element(By.XPATH, '//*[@id="login_tab"]/div[1]/div[3]/div/div[4]/div[2]')
+        submit_button.click()
+
+        waitElement = (By.XPATH,'//*[@id="loginEmailPassword"]')
+        WebDriverWait(driver, 30, 1).until(EC.presence_of_element_located(waitElement))
+        password_input = driver.find_element(By.XPATH, '//*[@id="loginEmailPassword"]')
+        password_input.send_keys(MINDSHOW_PASSWORD)
+
+        waitElement = (By.XPATH,'//*[@id="app"]/section/div[2]/div/div[1]/div[5]')
+        WebDriverWait(driver, 30, 1).until(EC.presence_of_element_located(waitElement))
+        submit_button = driver.find_element(By.XPATH, '//*[@id="app"]/section/div[2]/div/div[1]/div[5]')
+        submit_button.click()
         time.sleep(3)
-        print('匯入登入資訊')
+        print('登入成功')
+
         driver.get('https://www.mindshow.fun/#/folder/import')
 
         text_area = (By.XPATH,'//*[@id="my_import"]/div[3]/div[3]/textarea')
@@ -74,9 +92,8 @@ def markdownToPPT():
             if filename.endswith('.pptx'):
                 os.replace(filename, './download/file.pptx')
         print('下載完成')
+        driver.close()
     except Exception as E:
         print(f'異常: {E}')
         driver.close()
         markdownToPPT()
-    finally:
-        driver.close()
